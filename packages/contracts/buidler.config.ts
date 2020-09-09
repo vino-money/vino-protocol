@@ -5,6 +5,6 @@ usePlugin('@nomiclabs/buidler-waffle')
 
 export default {
   solc: {
-    version: '0.6.12',
+    version: '0.7.1',
   },
 } as BuidlerConfig

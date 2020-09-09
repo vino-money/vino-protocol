@@ -1,44 +1,16 @@
-/**
- *Submitted for verification at Etherscan.io on 2020-07-17
-*/
-
+// SPDX-License-Identifier: MIT
 /*
-   ____            __   __        __   _
-  / __/__ __ ___  / /_ / /  ___  / /_ (_)__ __
- _\ \ / // // _ \/ __// _ \/ -_)/ __// / \ \ /
-/___/ \_, //_//_/\__//_//_/\__/ \__//_/ /_\_\
-     /___/
-* Synthetix: YAMRewards.sol
-*
-* Docs: https://docs.synthetix.io/
-*
-*
-* MIT License
-* ===========
-*
-* Copyright (c) 2020 Synthetix
-*
-* Permission is hereby granted, free of charge, to any person obtaining a copy
-* of this software and associated documentation files (the "Software"), to deal
-* in the Software without restriction, including without limitation the rights
-* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-* copies of the Software, and to permit persons to whom the Software is
-* furnished to do so, subject to the following conditions:
-*
-* The above copyright notice and this permission notice shall be included in all
-* copies or substantial portions of the Software.
-*
-* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+
+      (_)                                              
+__   ___ _ __   ___   _ __ ___   ___  _ __   ___ _   _ 
+\ \ / / | '_ \ / _ \ | '_ ` _ \ / _ \| '_ \ / _ \ | | |
+ \ V /| | | | | (_) || | | | | | (_) | | | |  __/ |_| |
+  \_/ |_|_| |_|\___(_)_| |_| |_|\___/|_| |_|\___|\__, |
+                                                  __/ |
+                                                 |___/ 
 */
 
-// File: @openzeppelin/contracts/math/Math.sol
-
-pragma solidity ^0.5.0;
+pragma solidity ^0.7.0;
 
 /**
  * @dev Standard math utilities missing in the Solidity language.
@@ -64,13 +36,9 @@ library Math {
      */
     function average(uint256 a, uint256 b) internal pure returns (uint256) {
         // (a + b) / 2 can overflow, so we distribute
-        return (a / 2) + (b / 2) + ((a % 2 + b % 2) / 2);
+        return (a / 2) + (b / 2) + (((a % 2) + (b % 2)) / 2);
     }
 }
-
-// File: @openzeppelin/contracts/math/SafeMath.sol
-
-pragma solidity ^0.5.0;
 
 /**
  * @dev Wrappers over Solidity's arithmetic operations with added overflow
@@ -126,7 +94,11 @@ library SafeMath {
      *
      * _Available since v2.4.0._
      */
-    function sub(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
+    function sub(
+        uint256 a,
+        uint256 b,
+        string memory errorMessage
+    ) internal pure returns (uint256) {
         require(b <= a, errorMessage);
         uint256 c = a - b;
 
@@ -184,7 +156,11 @@ library SafeMath {
      *
      * _Available since v2.4.0._
      */
-    function div(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
+    function div(
+        uint256 a,
+        uint256 b,
+        string memory errorMessage
+    ) internal pure returns (uint256) {
         // Solidity only automatically asserts when dividing by 0
         require(b > 0, errorMessage);
         uint256 c = a / b;
@@ -221,15 +197,15 @@ library SafeMath {
      *
      * _Available since v2.4.0._
      */
-    function mod(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
+    function mod(
+        uint256 a,
+        uint256 b,
+        string memory errorMessage
+    ) internal pure returns (uint256) {
         require(b != 0, errorMessage);
         return a % b;
     }
 }
-
-// File: @openzeppelin/contracts/GSN/Context.sol
-
-pragma solidity ^0.5.0;
 
 /*
  * @dev Provides information about the current execution context, including the
@@ -241,10 +217,11 @@ pragma solidity ^0.5.0;
  *
  * This contract is only required for intermediate, library-like contracts.
  */
-contract Context {
+abstract contract Context {
     // Empty internal constructor, to prevent people from mistakenly deploying
     // an instance of this contract, which should be used via inheritance.
-    constructor () internal { }
+    // constructor() internal {}
+
     // solhint-disable-previous-line no-empty-blocks
 
     function _msgSender() internal view returns (address payable) {
@@ -257,87 +234,79 @@ contract Context {
     }
 }
 
-// File: @openzeppelin/contracts/ownership/Ownable.sol
-
-pragma solidity ^0.5.0;
-
 /**
  * @dev Contract module which provides a basic access control mechanism, where
- * there is an account (an owner) that can be granted exclusive access to
+ * there is an account (a sommelier) that can be granted exclusive access to
  * specific functions.
  *
  * This module is used through inheritance. It will make available the modifier
- * `onlyOwner`, which can be applied to your functions to restrict their use to
- * the owner.
+ * `onlySommelier`, which can be applied to your functions to restrict their use to
+ * the sommelier.
  */
-contract Ownable is Context {
-    address private _owner;
+abstract contract Sommelier is Context {
+    address private _sommelier;
 
-    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+    event SommelierTransferred(address indexed previousSommelier, address indexed newSommelier);
 
     /**
-     * @dev Initializes the contract setting the deployer as the initial owner.
+     * @dev Initializes the contract setting the deployer as the initial sommelier.
      */
-    constructor () internal {
-        _owner = _msgSender();
-        emit OwnershipTransferred(address(0), _owner);
+    constructor() {
+        _sommelier = _msgSender();
+        emit SommelierTransferred(address(0), _sommelier);
     }
 
     /**
-     * @dev Returns the address of the current owner.
+     * @dev Returns the address of the current sommelier.
      */
-    function owner() public view returns (address) {
-        return _owner;
+    function sommelier() public view returns (address) {
+        return _sommelier;
     }
 
     /**
-     * @dev Throws if called by any account other than the owner.
+     * @dev Throws if called by any account other than the sommelier.
      */
-    modifier onlyOwner() {
-        require(isOwner(), "Ownable: caller is not the owner");
+    modifier onlySommelier() {
+        require(isSommelier(), "Sommelier: caller is not the Sommelier");
         _;
     }
 
     /**
-     * @dev Returns true if the caller is the current owner.
+     * @dev Returns true if the caller is the current sommelier.
      */
-    function isOwner() public view returns (bool) {
-        return _msgSender() == _owner;
+    function isSommelier() public view returns (bool) {
+        return _msgSender() == _sommelier;
     }
 
     /**
-     * @dev Leaves the contract without owner. It will not be possible to call
-     * `onlyOwner` functions anymore. Can only be called by the current owner.
+     * @dev Leaves the contract without sommelier. It will not be possible to call
+     * `onlySommelier` functions anymore. Can only be called by the current sommelier.
      *
-     * NOTE: Renouncing ownership will leave the contract without an owner,
-     * thereby removing any functionality that is only available to the owner.
+     * NOTE: Renouncing sommeliership will leave the contract without a sommelier,
+     * thereby removing any functionality that is only available to the sommelier.
      */
-    function renounceOwnership() public onlyOwner {
-        emit OwnershipTransferred(_owner, address(0));
-        _owner = address(0);
+    function renounceSommelier() public onlySommelier {
+        emit SommelierTransferred(_sommelier, address(0));
+        _sommelier = address(0);
     }
 
     /**
-     * @dev Transfers ownership of the contract to a new account (`newOwner`).
-     * Can only be called by the current owner.
+     * @dev Transfers sommeliership of the contract to a new account (`newSommelier`).
+     * Can only be called by the current sommelier.
      */
-    function transferOwnership(address newOwner) public onlyOwner {
-        _transferOwnership(newOwner);
+    function transferSommelier(address newSommelier) public onlySommelier {
+        _transferSommelier(newSommelier);
     }
 
     /**
-     * @dev Transfers ownership of the contract to a new account (`newOwner`).
+     * @dev Transfers sommeliership of the contract to a new account (`newSommelier`).
      */
-    function _transferOwnership(address newOwner) internal {
-        require(newOwner != address(0), "Ownable: new owner is the zero address");
-        emit OwnershipTransferred(_owner, newOwner);
-        _owner = newOwner;
+    function _transferSommelier(address newSommelier) internal {
+        require(newSommelier != address(0), "Sommelier: new sommelier is the zero address");
+        emit SommelierTransferred(_sommelier, newSommelier);
+        _sommelier = newSommelier;
     }
 }
-
-// File: @openzeppelin/contracts/token/ERC20/IERC20.sol
-
-pragma solidity ^0.5.0;
 
 /**
  * @dev Interface of the ERC20 standard as defined in the EIP. Does not include
@@ -397,7 +366,11 @@ interface IERC20 {
      *
      * Emits a {Transfer} event.
      */
-    function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);
+    function transferFrom(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) external returns (bool);
 
     /**
      * @dev Emitted when `value` tokens are moved from one account (`from`) to
@@ -413,10 +386,6 @@ interface IERC20 {
      */
     event Approval(address indexed owner, address indexed spender, uint256 value);
 }
-
-// File: @openzeppelin/contracts/utils/Address.sol
-
-pragma solidity ^0.5.5;
 
 /**
  * @dev Collection of functions related to the address type
@@ -444,7 +413,9 @@ library Address {
         bytes32 codehash;
         bytes32 accountHash = 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470;
         // solhint-disable-next-line no-inline-assembly
-        assembly { codehash := extcodehash(account) }
+        assembly {
+            codehash := extcodehash(account)
+        }
         return (codehash != 0x0 && codehash != accountHash);
     }
 
@@ -480,17 +451,10 @@ library Address {
         require(address(this).balance >= amount, "Address: insufficient balance");
 
         // solhint-disable-next-line avoid-call-value
-        (bool success, ) = recipient.call.value(amount)("");
+        (bool success, ) = recipient.call{value: amount}("");
         require(success, "Address: unable to send value, recipient may have reverted");
     }
 }
-
-// File: @openzeppelin/contracts/token/ERC20/SafeERC20.sol
-
-pragma solidity ^0.5.0;
-
-
-
 
 /**
  * @title SafeERC20
@@ -505,33 +469,67 @@ library SafeERC20 {
     using SafeMath for uint256;
     using Address for address;
 
-    function safeTransfer(IERC20 token, address to, uint256 value) internal {
+    function safeTransfer(
+        IERC20 token,
+        address to,
+        uint256 value
+    ) internal {
         callOptionalReturn(token, abi.encodeWithSelector(token.transfer.selector, to, value));
     }
 
-    function safeTransferFrom(IERC20 token, address from, address to, uint256 value) internal {
-        callOptionalReturn(token, abi.encodeWithSelector(token.transferFrom.selector, from, to, value));
+    function safeTransferFrom(
+        IERC20 token,
+        address from,
+        address to,
+        uint256 value
+    ) internal {
+        callOptionalReturn(
+            token,
+            abi.encodeWithSelector(token.transferFrom.selector, from, to, value)
+        );
     }
 
-    function safeApprove(IERC20 token, address spender, uint256 value) internal {
+    function safeApprove(
+        IERC20 token,
+        address spender,
+        uint256 value
+    ) internal {
         // safeApprove should only be called when setting an initial allowance,
         // or when resetting it to zero. To increase and decrease it, use
         // 'safeIncreaseAllowance' and 'safeDecreaseAllowance'
         // solhint-disable-next-line max-line-length
-        require((value == 0) || (token.allowance(address(this), spender) == 0),
+        require(
+            (value == 0) || (token.allowance(address(this), spender) == 0),
             "SafeERC20: approve from non-zero to non-zero allowance"
         );
         callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, value));
     }
 
-    function safeIncreaseAllowance(IERC20 token, address spender, uint256 value) internal {
+    function safeIncreaseAllowance(
+        IERC20 token,
+        address spender,
+        uint256 value
+    ) internal {
         uint256 newAllowance = token.allowance(address(this), spender).add(value);
-        callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, newAllowance));
+        callOptionalReturn(
+            token,
+            abi.encodeWithSelector(token.approve.selector, spender, newAllowance)
+        );
     }
 
-    function safeDecreaseAllowance(IERC20 token, address spender, uint256 value) internal {
-        uint256 newAllowance = token.allowance(address(this), spender).sub(value, "SafeERC20: decreased allowance below zero");
-        callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, newAllowance));
+    function safeDecreaseAllowance(
+        IERC20 token,
+        address spender,
+        uint256 value
+    ) internal {
+        uint256 newAllowance = token.allowance(address(this), spender).sub(
+            value,
+            "SafeERC20: decreased allowance below zero"
+        );
+        callOptionalReturn(
+            token,
+            abi.encodeWithSelector(token.approve.selector, spender, newAllowance)
+        );
     }
 
     /**
@@ -555,56 +553,43 @@ library SafeERC20 {
         (bool success, bytes memory returndata) = address(token).call(data);
         require(success, "SafeERC20: low-level call failed");
 
-        if (returndata.length > 0) { // Return data is optional
+        if (returndata.length > 0) {
+            // Return data is optional
             // solhint-disable-next-line max-line-length
             require(abi.decode(returndata, (bool)), "SafeERC20: ERC20 operation did not succeed");
         }
     }
 }
 
-// File: contracts/IRewardDistributionRecipient.sol
+abstract contract IRewardDistributionRecipient is Sommelier {
+    address rewardDistribution;
 
-pragma solidity ^0.5.0;
-
-
-
-contract IRewardDistributionRecipient is Ownable {
-    address public rewardDistribution;
-
-    function notifyRewardAmount(uint256 reward) external;
+    function notifyRewardAmount(uint256 reward) external virtual;
 
     modifier onlyRewardDistribution() {
         require(_msgSender() == rewardDistribution, "Caller is not reward distribution");
         _;
     }
 
-    function setRewardDistribution(address _rewardDistribution)
-        external
-        onlyOwner
-    {
+    function setRewardDistribution(address _rewardDistribution) external onlySommelier {
         rewardDistribution = _rewardDistribution;
     }
 }
 
-// File: contracts/CurveRewards.sol
-
-pragma solidity ^0.5.0;
-
-
-interface YAM {
-    function yamsScalingFactor() external returns (uint256);
-}
-
-
-
-contract LPTokenWrapper {
+abstract contract PairingTokenWrapper {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
 
-    IERC20 public link = IERC20(0x514910771AF9Ca656af840dff83E8264EcF986CA);
+    // config
+    address public immutable pairingToken;
 
+    // state
     uint256 private _totalSupply;
     mapping(address => uint256) private _balances;
+
+    constructor(address _pairingToken) {
+        pairingToken = _pairingToken;
+    }
 
     function totalSupply() public view returns (uint256) {
         return _totalSupply;
@@ -614,26 +599,33 @@ contract LPTokenWrapper {
         return _balances[account];
     }
 
-    function stake(uint256 amount) public {
+    function stake(uint256 amount) public virtual {
         _totalSupply = _totalSupply.add(amount);
         _balances[msg.sender] = _balances[msg.sender].add(amount);
-        link.safeTransferFrom(msg.sender, address(this), amount);
+        IERC20(pairingToken).safeTransferFrom(msg.sender, address(this), amount);
     }
 
-    function withdraw(uint256 amount) public {
+    function withdraw(uint256 amount) public virtual {
         _totalSupply = _totalSupply.sub(amount);
         _balances[msg.sender] = _balances[msg.sender].sub(amount);
-        link.safeTransfer(msg.sender, amount);
+        IERC20(pairingToken).safeTransfer(msg.sender, amount);
     }
 }
 
-contract YAMLINKPool is LPTokenWrapper, IRewardDistributionRecipient {
-    IERC20 public yam = IERC20(0x0e2298E3B3390e3b945a5456fBf59eCc3f55DA16);
-    uint256 public constant DURATION = 625000; // ~7 1/4 days
+/// @title FirstPour
+/// @notice Basic wine tasting
+/// @dev Straight line distribution over preset duration
+contract FirstPour is PairingTokenWrapper, IRewardDistributionRecipient {
+    using SafeMath for uint256;
+    using SafeERC20 for IERC20;
 
-    uint256 public starttime = 1597172400; // 2020-08-11 19:00:00 (UTC UTC +00:00)
+    // config
+    address public immutable vinoToken;
+    uint256 public immutable DURATION;
     uint256 public periodFinish = 0;
     uint256 public rewardRate = 0;
+
+    // state
     uint256 public lastUpdateTime;
     uint256 public rewardPerTokenStored;
     mapping(address => uint256) public userRewardPerTokenPaid;
@@ -644,11 +636,6 @@ contract YAMLINKPool is LPTokenWrapper, IRewardDistributionRecipient {
     event Withdrawn(address indexed user, uint256 amount);
     event RewardPaid(address indexed user, uint256 reward);
 
-    modifier checkStart() {
-        require(block.timestamp >= starttime,"not start");
-        _;
-    }
-
     modifier updateReward(address account) {
         rewardPerTokenStored = rewardPerToken();
         lastUpdateTime = lastTimeRewardApplicable();
@@ -657,6 +644,14 @@ contract YAMLINKPool is LPTokenWrapper, IRewardDistributionRecipient {
             userRewardPerTokenPaid[account] = rewardPerTokenStored;
         }
         _;
+    }
+
+    constructor(
+        address _vinoToken,
+        address _pairingToken,
+        uint256 _duration
+    ) PairingTokenWrapper(_pairingToken) {
+        (vinoToken, DURATION) = (_vinoToken, _duration);
     }
 
     function lastTimeRewardApplicable() public view returns (uint256) {
@@ -669,11 +664,9 @@ contract YAMLINKPool is LPTokenWrapper, IRewardDistributionRecipient {
         }
         return
             rewardPerTokenStored.add(
-                lastTimeRewardApplicable()
-                    .sub(lastUpdateTime)
-                    .mul(rewardRate)
-                    .mul(1e18)
-                    .div(totalSupply())
+                lastTimeRewardApplicable().sub(lastUpdateTime).mul(rewardRate).mul(1e18).div(
+                    totalSupply()
+                )
             );
     }
 
@@ -685,16 +678,16 @@ contract YAMLINKPool is LPTokenWrapper, IRewardDistributionRecipient {
                 .add(rewards[account]);
     }
 
-    // stake visibility is public as overriding LPTokenWrapper's stake() function
-    function stake(uint256 amount) public updateReward(msg.sender) checkStart {
+    // stake visibility is public as overriding PairingTokenWrapper's stake() function
+    function stake(uint256 amount) public override updateReward(msg.sender) {
         require(amount > 0, "Cannot stake 0");
-        super.stake(amount);
+        PairingTokenWrapper.stake(amount);
         emit Staked(msg.sender, amount);
     }
 
-    function withdraw(uint256 amount) public updateReward(msg.sender) checkStart {
+    function withdraw(uint256 amount) public override updateReward(msg.sender) {
         require(amount > 0, "Cannot withdraw 0");
-        super.withdraw(amount);
+        PairingTokenWrapper.withdraw(amount);
         emit Withdrawn(msg.sender, amount);
     }
 
@@ -703,38 +696,30 @@ contract YAMLINKPool is LPTokenWrapper, IRewardDistributionRecipient {
         getReward();
     }
 
-    function getReward() public updateReward(msg.sender) checkStart {
+    function getReward() public updateReward(msg.sender) {
         uint256 reward = earned(msg.sender);
         if (reward > 0) {
             rewards[msg.sender] = 0;
-            uint256 scalingFactor = YAM(address(yam)).yamsScalingFactor();
-            uint256 trueReward = reward.mul(scalingFactor).div(10**18);
-            yam.safeTransfer(msg.sender, trueReward);
-            emit RewardPaid(msg.sender, trueReward);
+            IERC20(vinoToken).safeTransfer(msg.sender, reward);
+            emit RewardPaid(msg.sender, reward);
         }
     }
 
     function notifyRewardAmount(uint256 reward)
         external
+        override
         onlyRewardDistribution
         updateReward(address(0))
     {
-        if (block.timestamp > starttime) {
-          if (block.timestamp >= periodFinish) {
-              rewardRate = reward.div(DURATION);
-          } else {
-              uint256 remaining = periodFinish.sub(block.timestamp);
-              uint256 leftover = remaining.mul(rewardRate);
-              rewardRate = reward.add(leftover).div(DURATION);
-          }
-          lastUpdateTime = block.timestamp;
-          periodFinish = block.timestamp.add(DURATION);
-          emit RewardAdded(reward);
+        if (block.timestamp >= periodFinish) {
+            rewardRate = reward.div(DURATION);
         } else {
-          rewardRate = reward.div(DURATION);
-          lastUpdateTime = starttime;
-          periodFinish = starttime.add(DURATION);
-          emit RewardAdded(reward);
+            uint256 remaining = periodFinish.sub(block.timestamp);
+            uint256 leftover = remaining.mul(rewardRate);
+            rewardRate = reward.add(leftover).div(DURATION);
         }
+        lastUpdateTime = block.timestamp;
+        periodFinish = block.timestamp.add(DURATION);
+        emit RewardAdded(reward);
     }
 }
