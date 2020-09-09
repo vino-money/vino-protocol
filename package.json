@@ -1,0 +1,31 @@
+{
+  "name": "@vinomoney/vino-protocol",
+  "version": "1.0.0",
+  "keywords": [
+    "ethereum",
+    "react",
+    "workspaces",
+    "yarn"
+  ],
+  "private": true,
+  "scripts": {
+    "subgraph:auth": "yarn workspace @vinomoney/subgraph auth",
+    "subgraph:codegen": "yarn workspace @vinomoney/subgraph codegen",
+    "subgraph:build": "yarn workspace @vinomoney/subgraph build",
+    "subgraph:deploy": "yarn workspace @vinomoney/subgraph deploy",
+    "react-app:build": "yarn workspace @vinomoney/react-app build",
+    "react-app:eject": "yarn workspace @vinomoney/react-app eject",
+    "react-app:ipfs": "yarn workspace @vinomoney/react-app ipfs",
+    "react-app:start": "yarn workspace @vinomoney/react-app start",
+    "react-app:test": "yarn workspace @vinomoney/react-app test"
+  },
+  "workspaces": {
+    "nohoist": [
+      "**/@graphprotocol/graph-ts",
+      "**/@graphprotocol/graph-ts/**"
+    ],
+    "packages": [
+      "packages/*"
+    ]
+  }
+}
