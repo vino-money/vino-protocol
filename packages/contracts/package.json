@@ -20,5 +20,9 @@
     "solhint-plugin-prettier": "^0.0.5",
     "ts-node": "^9.0.0",
     "typescript": "^4.0.2"
+  },
+  "scripts": {
+    "compile": "yarn buidler compile",
+    "test": "yarn buidler test"
   }
 }
